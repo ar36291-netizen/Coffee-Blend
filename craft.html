@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Craft — Daily Grind Co.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+body { background: var(--bg-stone); }
+
+.page-header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg-stone);
+  border-bottom: 1px solid var(--line);
+  padding: 1.25rem 5vw;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.page-logo {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: 1.1rem; letter-spacing: 0.12em;
+  color: var(--ink); text-decoration: none;
+}
+.page-nav { display: flex; gap: 2rem; align-items: center; }
+.page-nav a {
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.page-nav a:hover { color: var(--ink); }
+.page-nav a.active { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
+.nav-cta {
+  border: 1px solid var(--ink);
+  padding: 0.5rem 1rem;
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink) !important;
+  transition: background 0.2s, color 0.2s;
+}
+.nav-cta:hover { background: var(--ink); color: var(--bg-stone) !important; }
+
+.page-intro {
+  padding: 5rem 5vw 3rem;
+  max-width: 640px;
+}
+.page-eyebrow {
+  font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent-copper); font-weight: 700; margin-bottom: 1rem;
+}
+.page-title {
+  font-family: var(--font-display);
+  font-weight: 600; font-size: 3.5rem; line-height: 1.05;
+  color: var(--ink); margin-bottom: 1.5rem;
+}
+.page-desc {
+  font-size: 0.9rem; line-height: 1.8;
+  color: var(--ink-soft); max-width: 52ch;
+}
+
+.craft-sections {
+  border-top: 1px solid var(--line);
+  padding-bottom: 6rem;
+}
+
+.craft-block {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  border-bottom: 1px solid var(--line);
+}
+.craft-block-label {
+  padding: 3rem 3vw;
+  border-right: 1px solid var(--line);
+}
+.craft-step-num {
+  font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent-copper); margin-bottom: 0.75rem;
+}
+.craft-block-title {
+  font-family: var(--font-display);
+  font-weight: 600; font-size: 1.6rem; line-height: 1.15;
+  color: var(--ink);
+}
+.craft-block-content {
+  padding: 3rem 4vw;
+}
+.craft-body {
+  font-size: 0.85rem; line-height: 1.8;
+  color: var(--ink-soft); max-width: 58ch;
+  margin-bottom: 2rem;
+}
+
+.craft-variants {
+  display: flex; flex-direction: column; gap: 1rem;
+}
+.craft-variant {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--line);
+  background: var(--bg-stone-deep);
+}
+.craft-variant-name {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink); margin-bottom: 0.4rem;
+}
+.craft-variant-desc {
+  font-size: 0.8rem; line-height: 1.6; color: var(--ink-soft);
+}
+.craft-variant.featured { border-color: var(--accent-copper); }
+.craft-variant.featured .craft-variant-name { color: var(--accent-copper); }
+
+.chicory-note {
+  margin-top: 2rem; padding: 1.5rem;
+  border-left: 2px solid var(--accent-copper);
+  background: rgba(181, 86, 46, 0.04);
+}
+.chicory-note p {
+  font-size: 0.82rem; line-height: 1.75; color: var(--ink-soft);
+}
+.chicory-note p strong { color: var(--ink); }
+
+@media (max-width: 768px) {
+  .page-title { font-size: 2.4rem; }
+  .craft-block { grid-template-columns: 1fr; }
+  .craft-block-label { border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <a href="index.html" class="page-logo">Daily Grind Co.</a>
+  <nav class="page-nav">
+    <a href="origins.html">Origins</a>
+    <a href="craft.html" class="active">Craft</a>
+    <a href="auth.html" class="nav-cta">Build a Blend</a>
+  </nav>
+</header>
+
+<div class="page-intro">
+  <div class="page-eyebrow">How it's made</div>
+  <h1 class="page-title">The decisions<br>behind the cup.</h1>
+  <p class="page-desc">Roast, grind, and chicory aren't just preferences — they're variables that change what ends up in your cup. Here's what each one actually does.</p>
+</div>
+
+<div class="craft-sections">
+
+  <div class="craft-block">
+    <div class="craft-block-label">
+      <div class="craft-step-num">01 / Roast</div>
+      <h2 class="craft-block-title">Heat changes everything.</h2>
+    </div>
+    <div class="craft-block-content">
+      <p class="craft-body">Roasting is where the green bean's chemistry becomes flavour. Heat causes the Maillard reaction — the same process behind bread crust and seared meat — breaking down sugars and proteins into hundreds of aromatic compounds. The longer and hotter the roast, the more origin character you trade for roast character.</p>
+      <div class="craft-variants">
+        <div class="craft-variant">
+          <div class="craft-variant-name">Light Roast</div>
+          <div class="craft-variant-desc">Higher acidity, more fruit and floral notes, lighter body. The bean's origin shines through most clearly. Best for Ethiopian and Colombian lots where natural complexity is the point.</div>
+        </div>
+        <div class="craft-variant featured">
+          <div class="craft-variant-name">Medium Roast</div>
+          <div class="craft-variant-desc">Balanced between origin character and roast sweetness. Acidity mellows, body builds, caramel notes develop. The most versatile roast level — works across filter, pour-over, and espresso.</div>
+        </div>
+        <div class="craft-variant">
+          <div class="craft-variant-name">Dark Roast</div>
+          <div class="craft-variant-desc">Roast flavour dominates — chocolate, smoke, bitterness. Origin notes largely disappear. Essential for Italian Style; works well for South Indian filter where bold body is the goal.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="craft-block">
+    <div class="craft-block-label">
+      <div class="craft-step-num">02 / Grind</div>
+      <h2 class="craft-block-title">Surface area is extraction.</h2>
+    </div>
+    <div class="craft-block-content">
+      <p class="craft-body">Grinding exposes the bean's interior to water. Finer grinds have more surface area — water extracts faster and more completely. Coarser grinds slow extraction down. The right grind depends entirely on your brew method and how long water contacts the grounds.</p>
+      <div class="craft-variants">
+        <div class="craft-variant">
+          <div class="craft-variant-name">Whole Bean</div>
+          <div class="craft-variant-desc">Grind fresh at home. Retains flavour longest — ground coffee goes stale in days, whole beans stay fresh for weeks. Best if you have a grinder and want maximum control.</div>
+        </div>
+        <div class="craft-variant">
+          <div class="craft-variant-name">Coarse Grind</div>
+          <div class="craft-variant-desc">For French press and cold brew. Large particle size slows extraction over longer brew times (4 min for press, 12+ hrs for cold brew). Too fine here = bitter, over-extracted cup.</div>
+        </div>
+        <div class="craft-variant featured">
+          <div class="craft-variant-name">Medium Grind</div>
+          <div class="craft-variant-desc">The everyday grind. Works for drip machines, pour-over, and AeroPress. Balanced extraction at standard brew times (3–4 min). The default for most home brewing.</div>
+        </div>
+        <div class="craft-variant">
+          <div class="craft-variant-name">Fine Grind</div>
+          <div class="craft-variant-desc">For South Indian filter and espresso machines. Very fine particle size enables the slow decoction (filter) or high-pressure extraction (espresso) these methods require. Too coarse here = weak, under-extracted.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="craft-block">
+    <div class="craft-block-label">
+      <div class="craft-step-num">03 / Chicory</div>
+      <h2 class="craft-block-title">A root, not a bean.</h2>
+    </div>
+    <div class="craft-block-content">
+      <p class="craft-body">Chicory (Cichorium intybus) is the roasted root of the chicory plant. It isn't coffee — it has no caffeine — but when roasted, it develops bitter, woody, and slightly caramel-like flavours that complement dark-roasted coffee and add body to the brew.</p>
+      <div class="craft-variants">
+        <div class="craft-variant">
+          <div class="craft-variant-name">Why South Indian filter coffee uses it</div>
+          <div class="craft-variant-desc">The South Indian filter method produces a concentrated decoction that gets diluted with hot milk. Chicory adds body and bitterness that holds up through dilution — without it, the decoction can taste thin when mixed. Traditional ratios run 80:20 to 60:40 coffee-to-chicory.</div>
+        </div>
+        <div class="craft-variant">
+          <div class="craft-variant-name">What it changes in the cup</div>
+          <div class="craft-variant-desc">More chicory = darker colour, thicker body, more bitterness, slightly less caffeine. It also makes the coffee more affordable per gram since chicory costs less than green beans. We let you set the ratio so the final cup is your call.</div>
+        </div>
+      </div>
+      <div class="chicory-note">
+        <p><strong>We only offer chicory for South Indian origin.</strong> Ethiopian, Colombian, and Italian Style are meant to be drunk as straight coffee — adding chicory to these would work against what makes them worth choosing in the first place.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
