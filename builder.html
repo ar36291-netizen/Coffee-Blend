@@ -812,7 +812,7 @@ async function loadSavedBlends() {
     return;
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await window.supabase
     .from('blends')
     .select('*')
     .eq('user_id', session.user.id)
@@ -866,7 +866,6 @@ async function handleSignOut() {
 async function init() {
   const { data: { session } } = await window.supabase.auth.getSession();
   if (!session) { window.location.href = 'auth.html'; return; }
-  document.getElementById('user-email-label').textContent = session.user.email;
   renderOrigins();
   renderOptions('roast-options', ORIGINS[0].roasts, 'roast', 'selectRoast');
   renderOptions('grind-options', ORIGINS[0].grinds, 'grind', 'selectGrind');
