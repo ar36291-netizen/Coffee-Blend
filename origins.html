@@ -11,6 +11,7 @@
 <style>
 body { background: var(--bg-stone); }
 
+/* NAV */
 .page-header {
   position: sticky; top: 0; z-index: 100;
   background: var(--bg-stone);
@@ -26,95 +27,117 @@ body { background: var(--bg-stone); }
 .page-nav { display: flex; gap: 2rem; align-items: center; }
 .page-nav a {
   font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--ink-soft); transition: color 0.2s;
 }
 .page-nav a:hover { color: var(--ink); }
 .page-nav a.active { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
 .nav-cta {
-  border: 1px solid var(--ink);
-  padding: 0.5rem 1rem;
+  border: 1px solid var(--ink); padding: 0.5rem 1rem;
   font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink) !important;
-  transition: background 0.2s, color 0.2s;
+  color: var(--ink) !important; transition: background 0.2s, color 0.2s;
 }
 .nav-cta:hover { background: var(--ink); color: var(--bg-stone) !important; }
 
-.page-intro {
-  padding: 5rem 5vw 3rem;
-  max-width: 640px;
+/* HERO */
+.page-hero {
+  position: relative;
+  height: 60vh; min-height: 400px;
+  overflow: hidden;
+  display: flex; align-items: flex-end;
+  padding: 3rem 5vw;
 }
-.page-eyebrow {
+.page-hero img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.55);
+}
+.hero-text { position: relative; z-index: 1; }
+.hero-eyebrow {
   font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--accent-copper); font-weight: 700; margin-bottom: 1rem;
+  color: var(--accent-copper-soft); font-weight: 700; margin-bottom: 0.75rem;
 }
-.page-title {
+.hero-title {
   font-family: var(--font-display);
   font-weight: 600; font-size: 3.5rem; line-height: 1.05;
-  color: var(--ink); margin-bottom: 1.5rem;
+  color: #fff; margin-bottom: 1rem;
 }
-.page-desc {
-  font-size: 0.9rem; line-height: 1.8;
-  color: var(--ink-soft); max-width: 52ch;
+.hero-subtitle {
+  font-size: 0.85rem; line-height: 1.75; color: rgba(255,255,255,0.7);
+  max-width: 52ch;
 }
 
-.origins-grid {
-  padding: 3rem 5vw 6rem;
+/* ORIGIN SECTIONS */
+.origin-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 0;
-  border-top: 1px solid var(--line);
-}
-
-.origin-card {
-  padding: 3rem 3vw;
+  min-height: 520px;
   border-bottom: 1px solid var(--line);
 }
-.origin-card:nth-child(odd) { border-right: 1px solid var(--line); }
+.origin-section:nth-child(even) { direction: rtl; }
+.origin-section:nth-child(even) > * { direction: ltr; }
 
+.origin-image {
+  position: relative;
+  overflow: hidden;
+}
+.origin-image img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+.origin-section:hover .origin-image img { transform: scale(1.03); }
+
+.origin-content {
+  padding: 3.5rem 4vw;
+  display: flex; flex-direction: column; justify-content: center;
+}
 .origin-coords {
-  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--accent-copper); margin-bottom: 1.25rem;
+  font-size: 0.6rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent-copper); margin-bottom: 0.75rem;
 }
 .origin-name {
   font-family: var(--font-display);
-  font-weight: 600; font-size: 2rem; line-height: 1.1;
-  color: var(--ink); margin-bottom: 0.4rem;
+  font-weight: 600; font-size: 2.4rem; line-height: 1.1;
+  color: var(--ink); margin-bottom: 0.35rem;
 }
 .origin-region {
-  font-size: 0.7rem; letter-spacing: 0.06em;
-  color: var(--ink-soft); margin-bottom: 1.5rem;
+  font-size: 0.7rem; letter-spacing: 0.05em; color: var(--ink-soft);
+  margin-bottom: 1.5rem;
 }
 .origin-body {
-  font-size: 0.85rem; line-height: 1.75;
-  color: var(--ink-soft); margin-bottom: 1.75rem;
-  max-width: 42ch;
+  font-size: 0.85rem; line-height: 1.8; color: var(--ink-soft);
+  max-width: 44ch; margin-bottom: 1.75rem;
 }
 .origin-tags {
-  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.75rem;
 }
 .tag {
-  font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
-  border: 1px solid var(--line);
-  padding: 0.3rem 0.65rem;
-  color: var(--ink-soft);
+  font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
+  border: 1px solid var(--line); padding: 0.28rem 0.6rem; color: var(--ink-soft);
 }
-.tag.highlight { border-color: var(--accent-copper); color: var(--accent-copper); }
+.tag.accent { border-color: var(--accent-copper); color: var(--accent-copper); }
 
-.origin-note {
-  margin-top: 1.5rem; padding-top: 1.5rem;
-  border-top: 1px solid var(--line);
-  font-size: 0.75rem; line-height: 1.7;
-  color: var(--ink-soft);
+.origin-meta {
+  display: flex; gap: 2.5rem;
+  padding-top: 1.5rem; border-top: 1px solid var(--line);
 }
-.origin-note strong {
-  color: var(--ink); font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.6rem;
+.meta-item {}
+.meta-label {
+  font-size: 0.58rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent-copper); font-weight: 700; margin-bottom: 0.3rem;
+}
+.meta-value {
+  font-size: 0.78rem; color: var(--ink-soft); line-height: 1.5;
 }
 
 @media (max-width: 768px) {
-  .page-title { font-size: 2.4rem; }
-  .origins-grid { grid-template-columns: 1fr; }
-  .origin-card:nth-child(odd) { border-right: none; }
+  .hero-title { font-size: 2.2rem; }
+  .origin-section, .origin-section:nth-child(even) { grid-template-columns: 1fr; direction: ltr; }
+  .origin-image { height: 260px; }
+  .origin-content { padding: 2rem 5vw; }
+  .origin-name { font-size: 1.8rem; }
   .origin-body { max-width: 100%; }
 }
 </style>
@@ -130,86 +153,146 @@ body { background: var(--bg-stone); }
   </nav>
 </header>
 
-<div class="page-intro">
-  <div class="page-eyebrow">Where it comes from</div>
-  <h1 class="page-title">Four origins.<br>One cup.</h1>
-  <p class="page-desc">Every coffee we carry is sourced from a specific region chosen for what it naturally does — not what processing can make it do. Here's what you're choosing from.</p>
-</div>
+<section class="page-hero">
+  <img src="https://images.unsplash.com/photo-1442162347872-bcd0f8a78f46?auto=format&fit=crop&w=1800&q=80" alt="Coffee cherries on the branch">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Where it comes from</div>
+    <h1 class="hero-title">Four origins.<br>One cup.</h1>
+    <p class="hero-subtitle">Every coffee we carry is sourced from a specific region chosen for what it naturally does. Here's what you're choosing from.</p>
+  </div>
+</section>
 
-<div class="origins-grid">
-
-  <div class="origin-card">
+<!-- SOUTH INDIAN -->
+<div class="origin-section">
+  <div class="origin-image">
+    <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=900&q=80" alt="Coffee plantation in Karnataka">
+  </div>
+  <div class="origin-content">
     <div class="origin-coords">13.3°N, 75.8°E</div>
     <h2 class="origin-name">South Indian</h2>
     <div class="origin-region">Chikmagalur &amp; Coorg, Karnataka</div>
-    <p class="origin-body">Grown in the Western Ghats at 900–1700m, Karnataka's estates produce a full-bodied, low-acid coffee with malt and earth undertones. The altitude slows the cherry's development, concentrating sugars without tipping into brightness.</p>
+    <p class="origin-body">Grown in the Western Ghats at 900–1700m, Karnataka estates produce a full-bodied, low-acid coffee with malt and earth undertones. The altitude slows cherry development, concentrating sugars without tipping into brightness.</p>
     <div class="origin-tags">
       <span class="tag">Full Body</span>
       <span class="tag">Low Acid</span>
       <span class="tag">Earthy</span>
       <span class="tag">Malt</span>
-      <span class="tag highlight">Chicory-compatible</span>
+      <span class="tag accent">Chicory-compatible</span>
     </div>
-    <div class="origin-note">
-      <strong>Altitude</strong><br>900–1700m<br><br>
-      <strong>Process</strong><br>Washed and natural, estate-dependent. Most Chikmagalur lots are washed, preserving the clean, earthy profile over fruit-forward notes.<br><br>
-      <strong>From ₹380 / 250g</strong>
+    <div class="origin-meta">
+      <div class="meta-item">
+        <div class="meta-label">Altitude</div>
+        <div class="meta-value">900–1700m</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Process</div>
+        <div class="meta-value">Washed</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">From</div>
+        <div class="meta-value">₹380 / 250g</div>
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="origin-card">
+<!-- ETHIOPIAN -->
+<div class="origin-section">
+  <div class="origin-image">
+    <img src="https://images.unsplash.com/photo-1580933073521-dc49ac0d4e6a?auto=format&fit=crop&w=900&q=80" alt="Ethiopian coffee ceremony">
+  </div>
+  <div class="origin-content">
     <div class="origin-coords">6.1°N, 38.5°E</div>
     <h2 class="origin-name">Ethiopian</h2>
     <div class="origin-region">Yirgacheffe, SNNPR</div>
-    <p class="origin-body">Yirgacheffe is widely regarded as one of the world's finest coffee origins. Natural processing lets the cherry dry around the bean, imparting intense berry and fruit notes. Floral aromatics and a lingering, tea-like finish.</p>
+    <p class="origin-body">Yirgacheffe is widely regarded as one of the world's finest coffee origins. Natural processing lets the cherry dry around the bean, imparting intense berry and fruit notes with a lingering, tea-like finish.</p>
     <div class="origin-tags">
       <span class="tag">Floral</span>
       <span class="tag">Blueberry</span>
       <span class="tag">Bergamot</span>
       <span class="tag">Light Body</span>
     </div>
-    <div class="origin-note">
-      <strong>Altitude</strong><br>1700–2200m<br><br>
-      <strong>Process</strong><br>Natural (sun-dried). The long drying period on raised beds allows fermentation flavours to develop, giving Yirgacheffe its distinctively fruit-forward character.<br><br>
-      <strong>From ₹520 / 250g</strong>
+    <div class="origin-meta">
+      <div class="meta-item">
+        <div class="meta-label">Altitude</div>
+        <div class="meta-value">1700–2200m</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Process</div>
+        <div class="meta-value">Natural</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">From</div>
+        <div class="meta-value">₹520 / 250g</div>
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="origin-card">
+<!-- COLOMBIAN -->
+<div class="origin-section">
+  <div class="origin-image">
+    <img src="https://images.unsplash.com/photo-1598040958247-cf5d46fcef3c?auto=format&fit=crop&w=900&q=80" alt="Colombian coffee farm in the Andes">
+  </div>
+  <div class="origin-content">
     <div class="origin-coords">1.8°N, 76.1°W</div>
     <h2 class="origin-name">Colombian</h2>
     <div class="origin-region">Huila, Southern Colombia</div>
-    <p class="origin-body">Huila sits in the Andes where two mountain ranges converge, creating exceptional microclimates. The result is a balanced, clean cup with caramel sweetness and bright but mild acidity — the definition of an everyday specialty coffee.</p>
+    <p class="origin-body">Huila sits where two Andean ranges converge, creating exceptional microclimates. The result is a balanced, clean cup with caramel sweetness and bright but mild acidity — the definition of an everyday specialty coffee.</p>
     <div class="origin-tags">
       <span class="tag">Caramel</span>
       <span class="tag">Balanced</span>
       <span class="tag">Mild Acid</span>
       <span class="tag">Clean</span>
     </div>
-    <div class="origin-note">
-      <strong>Altitude</strong><br>1500–2000m<br><br>
-      <strong>Process</strong><br>Washed. Colombia's wet-milling infrastructure is among the most consistent in the world, which is why Huila lots reliably deliver clarity and sweetness without lot-to-lot variation.<br><br>
-      <strong>From ₹460 / 250g</strong>
+    <div class="origin-meta">
+      <div class="meta-item">
+        <div class="meta-label">Altitude</div>
+        <div class="meta-value">1500–2000m</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Process</div>
+        <div class="meta-value">Washed</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">From</div>
+        <div class="meta-value">₹460 / 250g</div>
+      </div>
     </div>
   </div>
+</div>
 
-  <div class="origin-card">
+<!-- ITALIAN STYLE -->
+<div class="origin-section">
+  <div class="origin-image">
+    <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=900&q=80" alt="Italian espresso shot">
+  </div>
+  <div class="origin-content">
     <div class="origin-coords">40.8°N, 14.2°E</div>
     <h2 class="origin-name">Italian Style</h2>
     <div class="origin-region">Napoli blend, sourced globally</div>
-    <p class="origin-body">This isn't a single origin — it's a tradition. The Neapolitan style demands a dark, intense roast of robusta-heavy blends, producing espresso with a thick crema, dark chocolate bitterness, and a creamy body that holds up through milk.</p>
+    <p class="origin-body">Not a single origin — a tradition. The Neapolitan style demands a dark, intense roast of robusta-heavy blends, producing espresso with a thick crema, dark chocolate bitterness, and a body that holds up through milk.</p>
     <div class="origin-tags">
       <span class="tag">Dark Roast</span>
       <span class="tag">Chocolate</span>
       <span class="tag">Robust</span>
       <span class="tag">Espresso-forward</span>
     </div>
-    <div class="origin-note">
-      <strong>Blend composition</strong><br>Robusta-forward with Arabica for balance. Robusta contributes caffeine, crema, and bitterness; Arabica smooths the edges and adds aromatic complexity.<br><br>
-      <strong>From ₹430 / 250g</strong>
+    <div class="origin-meta">
+      <div class="meta-item">
+        <div class="meta-label">Blend</div>
+        <div class="meta-value">Robusta-forward</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Best for</div>
+        <div class="meta-value">Espresso, Moka</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">From</div>
+        <div class="meta-value">₹430 / 250g</div>
+      </div>
     </div>
   </div>
-
 </div>
 
 </body>

@@ -11,6 +11,7 @@
 <style>
 body { background: var(--bg-stone); }
 
+/* NAV */
 .page-header {
   position: sticky; top: 0; z-index: 100;
   background: var(--bg-stone);
@@ -26,101 +27,132 @@ body { background: var(--bg-stone); }
 .page-nav { display: flex; gap: 2rem; align-items: center; }
 .page-nav a {
   font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink-soft);
+  color: var(--ink-soft); transition: color 0.2s;
 }
 .page-nav a:hover { color: var(--ink); }
 .page-nav a.active { color: var(--ink); border-bottom: 1px solid var(--ink); padding-bottom: 2px; }
 .nav-cta {
-  border: 1px solid var(--ink);
-  padding: 0.5rem 1rem;
+  border: 1px solid var(--ink); padding: 0.5rem 1rem;
   font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink) !important;
-  transition: background 0.2s, color 0.2s;
+  color: var(--ink) !important; transition: background 0.2s, color 0.2s;
 }
 .nav-cta:hover { background: var(--ink); color: var(--bg-stone) !important; }
 
-.page-intro {
-  padding: 5rem 5vw 3rem;
-  max-width: 640px;
+/* HERO */
+.page-hero {
+  position: relative;
+  height: 60vh; min-height: 400px;
+  overflow: hidden;
+  display: flex; align-items: flex-end;
+  padding: 3rem 5vw;
 }
-.page-eyebrow {
+.page-hero img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.5);
+}
+.hero-text { position: relative; z-index: 1; }
+.hero-eyebrow {
   font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--accent-copper); font-weight: 700; margin-bottom: 1rem;
+  color: var(--accent-copper-soft); font-weight: 700; margin-bottom: 0.75rem;
 }
-.page-title {
+.hero-title {
   font-family: var(--font-display);
   font-weight: 600; font-size: 3.5rem; line-height: 1.05;
-  color: var(--ink); margin-bottom: 1.5rem;
+  color: #fff; margin-bottom: 1rem;
 }
-.page-desc {
-  font-size: 0.9rem; line-height: 1.8;
-  color: var(--ink-soft); max-width: 52ch;
-}
-
-.craft-sections {
-  border-top: 1px solid var(--line);
-  padding-bottom: 6rem;
+.hero-subtitle {
+  font-size: 0.85rem; line-height: 1.75;
+  color: rgba(255,255,255,0.7); max-width: 52ch;
 }
 
-.craft-block {
-  display: grid;
-  grid-template-columns: 280px 1fr;
+/* CRAFT SECTIONS */
+.craft-section {
   border-bottom: 1px solid var(--line);
 }
-.craft-block-label {
-  padding: 3rem 3vw;
+
+/* Full-bleed image banner per section */
+.craft-image-banner {
+  position: relative;
+  height: 380px;
+  overflow: hidden;
+}
+.craft-image-banner img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.75) sepia(15%);
+  transition: transform 0.7s ease;
+}
+.craft-section:hover .craft-image-banner img { transform: scale(1.02); }
+
+.craft-image-label {
+  position: absolute; bottom: 2rem; left: 5vw;
+}
+.craft-step-badge {
+  display: inline-block;
+  font-size: 0.58rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent-copper-soft);
+  border: 1px solid rgba(201,122,82,0.5);
+  padding: 0.3rem 0.7rem; margin-bottom: 0.75rem;
+}
+.craft-image-title {
+  font-family: var(--font-display);
+  font-weight: 600; font-size: 2.8rem; line-height: 1.1;
+  color: #fff;
+}
+
+/* Content below banner */
+.craft-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+}
+.craft-intro {
+  padding: 2.5rem 4vw;
   border-right: 1px solid var(--line);
 }
-.craft-step-num {
-  font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--accent-copper); margin-bottom: 0.75rem;
-}
-.craft-block-title {
-  font-family: var(--font-display);
-  font-weight: 600; font-size: 1.6rem; line-height: 1.15;
-  color: var(--ink);
-}
-.craft-block-content {
-  padding: 3rem 4vw;
-}
-.craft-body {
-  font-size: 0.85rem; line-height: 1.8;
-  color: var(--ink-soft); max-width: 58ch;
-  margin-bottom: 2rem;
+.craft-intro-text {
+  font-size: 0.88rem; line-height: 1.8; color: var(--ink-soft);
 }
 
 .craft-variants {
-  display: flex; flex-direction: column; gap: 1rem;
+  padding: 2.5rem 4vw;
+  display: flex; flex-direction: column; gap: 0;
 }
 .craft-variant {
-  padding: 1.25rem 1.5rem;
-  border: 1px solid var(--line);
-  background: var(--bg-stone-deep);
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--line);
 }
+.craft-variant:last-child { border-bottom: none; }
 .craft-variant-name {
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink); margin-bottom: 0.4rem;
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink); margin-bottom: 0.35rem;
 }
 .craft-variant-desc {
-  font-size: 0.8rem; line-height: 1.6; color: var(--ink-soft);
+  font-size: 0.8rem; line-height: 1.65; color: var(--ink-soft);
 }
-.craft-variant.featured { border-color: var(--accent-copper); }
 .craft-variant.featured .craft-variant-name { color: var(--accent-copper); }
 
-.chicory-note {
-  margin-top: 2rem; padding: 1.5rem;
+/* Chicory note */
+.chicory-callout {
+  grid-column: 1 / -1;
+  margin: 0 4vw 2.5rem;
+  padding: 1.5rem 1.75rem;
   border-left: 2px solid var(--accent-copper);
-  background: rgba(181, 86, 46, 0.04);
-}
-.chicory-note p {
+  background: rgba(181,86,46,0.04);
   font-size: 0.82rem; line-height: 1.75; color: var(--ink-soft);
 }
-.chicory-note p strong { color: var(--ink); }
+.chicory-callout strong { color: var(--ink); }
 
 @media (max-width: 768px) {
-  .page-title { font-size: 2.4rem; }
-  .craft-block { grid-template-columns: 1fr; }
-  .craft-block-label { border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 1.5rem; }
+  .hero-title { font-size: 2.2rem; }
+  .craft-image-banner { height: 260px; }
+  .craft-image-title { font-size: 2rem; }
+  .craft-content { grid-template-columns: 1fr; }
+  .craft-intro { border-right: none; border-bottom: 1px solid var(--line); }
+  .chicory-callout { margin: 0 5vw 2rem; }
 }
 </style>
 </head>
@@ -135,89 +167,106 @@ body { background: var(--bg-stone); }
   </nav>
 </header>
 
-<div class="page-intro">
-  <div class="page-eyebrow">How it's made</div>
-  <h1 class="page-title">The decisions<br>behind the cup.</h1>
-  <p class="page-desc">Roast, grind, and chicory aren't just preferences — they're variables that change what ends up in your cup. Here's what each one actually does.</p>
+<section class="page-hero">
+  <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1800&q=80" alt="Coffee craft overhead">
+  <div class="hero-text">
+    <div class="hero-eyebrow">How it's made</div>
+    <h1 class="hero-title">The decisions<br>behind the cup.</h1>
+    <p class="hero-subtitle">Roast, grind, and chicory aren't just preferences — they're variables that change what ends up in your cup.</p>
+  </div>
+</section>
+
+<!-- ROAST -->
+<div class="craft-section">
+  <div class="craft-image-banner">
+    <img src="https://images.unsplash.com/photo-1559496417-e7f25cb247f3?auto=format&fit=crop&w=1800&q=80" alt="Coffee beans being roasted">
+    <div class="craft-image-label">
+      <div class="craft-step-badge">01 / Roast</div>
+      <h2 class="craft-image-title">Heat changes<br>everything.</h2>
+    </div>
+  </div>
+  <div class="craft-content">
+    <div class="craft-intro">
+      <p class="craft-intro-text">Roasting is where the green bean's chemistry becomes flavour. Heat triggers the Maillard reaction — breaking down sugars and proteins into hundreds of aromatic compounds. The longer and hotter the roast, the more origin character you trade for roast character.</p>
+    </div>
+    <div class="craft-variants">
+      <div class="craft-variant">
+        <div class="craft-variant-name">Light Roast</div>
+        <div class="craft-variant-desc">Higher acidity, more fruit and floral notes, lighter body. Origin character is most pronounced. Best for Ethiopian and Colombian where natural complexity is the point.</div>
+      </div>
+      <div class="craft-variant featured">
+        <div class="craft-variant-name">Medium Roast — Most versatile</div>
+        <div class="craft-variant-desc">Balanced between origin and roast sweetness. Acidity mellows, body builds, caramel notes develop. Works across filter, pour-over, and espresso.</div>
+      </div>
+      <div class="craft-variant">
+        <div class="craft-variant-name">Dark Roast</div>
+        <div class="craft-variant-desc">Roast flavour dominates — chocolate, smoke, bitterness. Origin notes largely disappear. Essential for Italian Style; works for South Indian filter where bold body is the goal.</div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="craft-sections">
-
-  <div class="craft-block">
-    <div class="craft-block-label">
-      <div class="craft-step-num">01 / Roast</div>
-      <h2 class="craft-block-title">Heat changes everything.</h2>
+<!-- GRIND -->
+<div class="craft-section">
+  <div class="craft-image-banner">
+    <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1800&q=80" alt="Coffee being ground fresh">
+    <div class="craft-image-label">
+      <div class="craft-step-badge">02 / Grind</div>
+      <h2 class="craft-image-title">Surface area<br>is extraction.</h2>
     </div>
-    <div class="craft-block-content">
-      <p class="craft-body">Roasting is where the green bean's chemistry becomes flavour. Heat causes the Maillard reaction — the same process behind bread crust and seared meat — breaking down sugars and proteins into hundreds of aromatic compounds. The longer and hotter the roast, the more origin character you trade for roast character.</p>
-      <div class="craft-variants">
-        <div class="craft-variant">
-          <div class="craft-variant-name">Light Roast</div>
-          <div class="craft-variant-desc">Higher acidity, more fruit and floral notes, lighter body. The bean's origin shines through most clearly. Best for Ethiopian and Colombian lots where natural complexity is the point.</div>
-        </div>
-        <div class="craft-variant featured">
-          <div class="craft-variant-name">Medium Roast</div>
-          <div class="craft-variant-desc">Balanced between origin character and roast sweetness. Acidity mellows, body builds, caramel notes develop. The most versatile roast level — works across filter, pour-over, and espresso.</div>
-        </div>
-        <div class="craft-variant">
-          <div class="craft-variant-name">Dark Roast</div>
-          <div class="craft-variant-desc">Roast flavour dominates — chocolate, smoke, bitterness. Origin notes largely disappear. Essential for Italian Style; works well for South Indian filter where bold body is the goal.</div>
-        </div>
+  </div>
+  <div class="craft-content">
+    <div class="craft-intro">
+      <p class="craft-intro-text">Grinding exposes the bean's interior to water. Finer grinds have more surface area — water extracts faster and more completely. Coarser grinds slow extraction down. The right grind depends entirely on your brew method and how long water contacts the grounds.</p>
+    </div>
+    <div class="craft-variants">
+      <div class="craft-variant">
+        <div class="craft-variant-name">Whole Bean</div>
+        <div class="craft-variant-desc">Grind fresh at home. Retains flavour longest — ground coffee goes stale in days, whole beans stay fresh for weeks. Best if you have a grinder and want maximum control.</div>
+      </div>
+      <div class="craft-variant">
+        <div class="craft-variant-name">Coarse Grind</div>
+        <div class="craft-variant-desc">French press and cold brew. Large particle size slows extraction over longer brew times (4 min press, 12+ hrs cold brew).</div>
+      </div>
+      <div class="craft-variant featured">
+        <div class="craft-variant-name">Medium Grind — Everyday default</div>
+        <div class="craft-variant-desc">Drip machines, pour-over, AeroPress. Balanced extraction at standard brew times (3–4 min).</div>
+      </div>
+      <div class="craft-variant">
+        <div class="craft-variant-name">Fine Grind</div>
+        <div class="craft-variant-desc">South Indian filter and espresso. Very fine particle size enables the slow decoction or high-pressure extraction these methods require.</div>
       </div>
     </div>
   </div>
+</div>
 
-  <div class="craft-block">
-    <div class="craft-block-label">
-      <div class="craft-step-num">02 / Grind</div>
-      <h2 class="craft-block-title">Surface area is extraction.</h2>
-    </div>
-    <div class="craft-block-content">
-      <p class="craft-body">Grinding exposes the bean's interior to water. Finer grinds have more surface area — water extracts faster and more completely. Coarser grinds slow extraction down. The right grind depends entirely on your brew method and how long water contacts the grounds.</p>
-      <div class="craft-variants">
-        <div class="craft-variant">
-          <div class="craft-variant-name">Whole Bean</div>
-          <div class="craft-variant-desc">Grind fresh at home. Retains flavour longest — ground coffee goes stale in days, whole beans stay fresh for weeks. Best if you have a grinder and want maximum control.</div>
-        </div>
-        <div class="craft-variant">
-          <div class="craft-variant-name">Coarse Grind</div>
-          <div class="craft-variant-desc">For French press and cold brew. Large particle size slows extraction over longer brew times (4 min for press, 12+ hrs for cold brew). Too fine here = bitter, over-extracted cup.</div>
-        </div>
-        <div class="craft-variant featured">
-          <div class="craft-variant-name">Medium Grind</div>
-          <div class="craft-variant-desc">The everyday grind. Works for drip machines, pour-over, and AeroPress. Balanced extraction at standard brew times (3–4 min). The default for most home brewing.</div>
-        </div>
-        <div class="craft-variant">
-          <div class="craft-variant-name">Fine Grind</div>
-          <div class="craft-variant-desc">For South Indian filter and espresso machines. Very fine particle size enables the slow decoction (filter) or high-pressure extraction (espresso) these methods require. Too coarse here = weak, under-extracted.</div>
-        </div>
-      </div>
+<!-- CHICORY -->
+<div class="craft-section">
+  <div class="craft-image-banner">
+    <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=1800&q=80" alt="South Indian filter coffee with chicory">
+    <div class="craft-image-label">
+      <div class="craft-step-badge">03 / Chicory</div>
+      <h2 class="craft-image-title">A root,<br>not a bean.</h2>
     </div>
   </div>
-
-  <div class="craft-block">
-    <div class="craft-block-label">
-      <div class="craft-step-num">03 / Chicory</div>
-      <h2 class="craft-block-title">A root, not a bean.</h2>
+  <div class="craft-content">
+    <div class="craft-intro">
+      <p class="craft-intro-text">Chicory (Cichorium intybus) is the roasted root of the chicory plant. It has no caffeine, but when roasted it develops bitter, woody, and slightly caramel-like flavours that complement dark coffee and add body to the brew. South Indian filter coffee has used it for generations.</p>
     </div>
-    <div class="craft-block-content">
-      <p class="craft-body">Chicory (Cichorium intybus) is the roasted root of the chicory plant. It isn't coffee — it has no caffeine — but when roasted, it develops bitter, woody, and slightly caramel-like flavours that complement dark-roasted coffee and add body to the brew.</p>
-      <div class="craft-variants">
-        <div class="craft-variant">
-          <div class="craft-variant-name">Why South Indian filter coffee uses it</div>
-          <div class="craft-variant-desc">The South Indian filter method produces a concentrated decoction that gets diluted with hot milk. Chicory adds body and bitterness that holds up through dilution — without it, the decoction can taste thin when mixed. Traditional ratios run 80:20 to 60:40 coffee-to-chicory.</div>
-        </div>
-        <div class="craft-variant">
-          <div class="craft-variant-name">What it changes in the cup</div>
-          <div class="craft-variant-desc">More chicory = darker colour, thicker body, more bitterness, slightly less caffeine. It also makes the coffee more affordable per gram since chicory costs less than green beans. We let you set the ratio so the final cup is your call.</div>
-        </div>
+    <div class="craft-variants">
+      <div class="craft-variant">
+        <div class="craft-variant-name">Why it works in South Indian filter</div>
+        <div class="craft-variant-desc">The filter method produces a concentrated decoction diluted with hot milk. Chicory adds body and bitterness that holds up through dilution — without it, the decoction can taste thin. Traditional ratios run 80:20 to 60:40 coffee-to-chicory.</div>
       </div>
-      <div class="chicory-note">
-        <p><strong>We only offer chicory for South Indian origin.</strong> Ethiopian, Colombian, and Italian Style are meant to be drunk as straight coffee — adding chicory to these would work against what makes them worth choosing in the first place.</p>
+      <div class="craft-variant">
+        <div class="craft-variant-name">What it changes in the cup</div>
+        <div class="craft-variant-desc">More chicory = darker colour, thicker body, more bitterness, slightly less caffeine. We let you set the ratio so the final cup is your call.</div>
       </div>
+    </div>
+    <div class="chicory-callout">
+      <strong>Only available for South Indian origin.</strong> Ethiopian, Colombian, and Italian Style are meant to be drunk as straight coffee — adding chicory works against what makes them worth choosing.
     </div>
   </div>
-
 </div>
 
 </body>
