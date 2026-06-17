@@ -134,6 +134,35 @@
     color: var(--ink-soft);
   }
   .auth-footer a { color: var(--ink); border-bottom: 1px solid currentColor; }
+  .welcome-back {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+  }
+  .welcome-back-email {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    margin-bottom: 0.5rem;
+  }
+  .welcome-back-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    word-break: break-all;
+  }
+  .welcome-back .submit-btn { margin-bottom: 0.75rem; }
+  .btn-switch {
+    width: 100%; background: none; border: 1px solid var(--line);
+    padding: 0.875rem; font-family: var(--font-body);
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-soft); cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-switch:hover { border-color: var(--ink); color: var(--ink); }
   .google-btn {
     width: 100%;
     display: flex; align-items: center; justify-content: center; gap: 0.75rem;
@@ -209,6 +238,14 @@
     <p class="auth-footer">
       By continuing you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
     </p>
+
+    <!-- WELCOME BACK STATE -->
+    <div class="welcome-back" id="welcome-back">
+      <div class="auth-eyebrow">Welcome back</div>
+      <div class="welcome-back-name" id="welcome-email"></div>
+      <button class="submit-btn" onclick="window.location.href='builder.html'">Continue to Builder →</button>
+      <button class="btn-switch" onclick="switchAccount()">Sign in with a different account</button>
+    </div>
   </div>
 </div>
 
@@ -229,12 +266,29 @@ function setMsg(text, success = false) {
   el.className = 'auth-message' + (success ? ' success' : '');
 }
 
+function showWelcomeBack(email) {
+  document.getElementById('form-signin').style.display = 'none';
+  document.getElementById('form-signup').style.display = 'none';
+  document.querySelector('.tab-row').style.display = 'none';
+  document.querySelectorAll('.divider').forEach(el => el.style.display = 'none');
+  document.querySelector('.google-btn').style.display = 'none';
+  document.querySelector('.auth-footer').style.display = 'none';
+  document.querySelector('.auth-title').textContent = 'You\'re signed in.';
+  document.getElementById('welcome-email').textContent = email;
+  document.getElementById('welcome-back').style.display = 'block';
+}
+
+async function switchAccount() {
+  await window.supabase.auth.signOut();
+  window.location.reload();
+}
+
 async function handleSignIn(e) {
   e.preventDefault();
   const btn = document.getElementById('btn-signin');
   btn.disabled = true;
   btn.textContent = 'Signing in…';
-  const { error } = await supabase.auth.signInWithPassword({
+  const { error } = await window.supabase.auth.signInWithPassword({
     email: document.getElementById('signin-email').value,
     password: document.getElementById('signin-password').value,
   });
@@ -247,7 +301,7 @@ async function handleSignUp(e) {
   const btn = document.getElementById('btn-signup');
   btn.disabled = true;
   btn.textContent = 'Creating account…';
-  const { error } = await supabase.auth.signUp({
+  const { error } = await window.supabase.auth.signUp({
     email: document.getElementById('signup-email').value,
     password: document.getElementById('signup-password').value,
   });
@@ -256,16 +310,16 @@ async function handleSignUp(e) {
 }
 
 async function handleGoogleLogin() {
-  const { error } = await supabase.auth.signInWithOAuth({
+  const { error } = await window.supabase.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo: window.location.origin + '/builder.html' }
   });
   if (error) setMsg(error.message);
 }
 
-// Redirect if already logged in
-supabase.auth.getSession().then(({ data: { session } }) => {
-  if (session) window.location.href = 'builder.html';
+// Show welcome-back state if already logged in (don't auto-redirect)
+window.supabase.auth.getSession().then(({ data: { session } }) => {
+  if (session) showWelcomeBack(session.user.email);
 });
 </script>
 </body>
