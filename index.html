@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Grind Co. — Build Your Origin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-brand">Daily Grind Co.</div>
+  <div id="loader-bar"><div id="loader-bar-fill"></div></div>
+  <div id="loader-percent">0%</div>
+</div>
+
+<!-- FIXED HEADER -->
+<header class="site-header">
+  <nav>
+    <div class="logo">Daily Grind Co.</div>
+    <div class="nav-links">
+      <a href="#origins">Origins</a>
+      <a href="#craft">Craft</a>
+      <a href="auth.html" class="nav-cta">Build a Blend</a>
+    </div>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero-standalone">
+  <span class="section-label">SOURCED ACROSS FOUR ORIGINS</span>
+  <h1 class="hero-heading">
+    <span class="word">Coffee,</span>
+    <span class="word">built</span>
+    <span class="word">to</span>
+    <span class="word">your</span>
+    <span class="word">origin.</span>
+  </h1>
+  <p class="hero-tagline">Choose a region. Choose a roast. We grind it the way that region has always demanded.</p>
+  <div class="scroll-indicator">
+    <svg class="mouse-icon" viewBox="0 0 24 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="22" height="36" rx="11" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="12" y1="8" x2="12" y2="14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+        <animate attributeName="y1" values="8;12;8" dur="1.8s" repeatCount="indefinite"/>
+        <animate attributeName="y2" values="14;18;14" dur="1.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.2;1" dur="1.8s" repeatCount="indefinite"/>
+      </line>
+    </svg>
+  </div>
+</section>
+
+<!-- CANVAS -->
+<div class="canvas-wrap">
+  <canvas id="canvas"></canvas>
+  <div class="canvas-warm"></div>
+</div>
+
+<!-- DARK OVERLAY -->
+<div id="dark-overlay"></div>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap" data-scroll-speed="-20">
+  <div class="marquee-text">CHIKMAGALUR — YIRGACHEFFE — HUILA — NAPOLI — </div>
+</div>
+
+<!-- SCROLL CONTAINER -->
+<div id="scroll-container">
+
+  <section class="scroll-section section-content align-left"
+            data-enter="8" data-leave="24" data-animation="slide-left">
+    <div class="section-inner">
+      <span class="section-label">13.3°N, 75.8°E</span>
+      <h2 class="section-heading">The bean knows<br>where it's from.</h2>
+      <p class="section-body">Every region ferments, dries, and roasts differently because the climate demands it. We don't smooth that out. We build around it.</p>
+    </div>
+  </section>
+
+  <section class="scroll-section section-content align-right"
+            data-enter="26" data-leave="42" data-animation="slide-right">
+    <div class="section-inner">
+      <span class="section-label">THE GRIND</span>
+      <h2 class="section-heading">Ground for<br>the method.</h2>
+      <p class="section-body">A South Indian filter demands a fine, even grind to hold the decoction. An Ethiopian pour-over wants something coarser, slower, gentler. We match grind to origin, not the other way round.</p>
+    </div>
+  </section>
+
+  <section class="scroll-section section-content align-left"
+            data-enter="44" data-leave="58" data-animation="fade-up">
+    <div class="section-inner">
+      <span class="section-label">CHICORY, WHERE IT BELONGS</span>
+      <h2 class="section-heading">Some origins<br>ask for it.</h2>
+      <p class="section-body">South Indian filter coffee has used chicory for generations, for body, for bitterness, for the right pour. We offer it only where tradition calls for it, in a ratio you control.</p>
+    </div>
+  </section>
+
+  <section class="scroll-section section-stats"
+            data-enter="60" data-leave="76" data-animation="stagger-up">
+    <div class="stats-grid">
+      <div class="stat">
+        <span class="stat-number" data-value="4" data-decimals="0">0</span>
+        <span class="stat-suffix">origins</span>
+        <span class="stat-label">currently sourced</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number" data-value="12" data-decimals="0">0</span>
+        <span class="stat-suffix">hrs</span>
+        <span class="stat-label">roast-to-ship window</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number" data-value="3" data-decimals="0">0</span>
+        <span class="stat-suffix">grinds</span>
+        <span class="stat-label">per origin, minimum</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="scroll-section section-content align-right"
+            data-enter="78" data-leave="92" data-animation="clip-reveal">
+    <div class="section-inner">
+      <span class="section-label">YOUR BLEND, YOUR RULES</span>
+      <h2 class="section-heading">Pick an origin.<br>Build from there.</h2>
+      <p class="section-body">Roast level, grind, chicory ratio where it applies. Save it. Reorder it. It's your cup, configured properly.</p>
+    </div>
+  </section>
+
+  <section class="scroll-section section-cta" data-enter="93" data-leave="100" data-animation="scale-up" data-persist="true">
+    <div class="section-inner">
+      <span class="section-label">START HERE</span>
+      <h2 class="section-heading">Build your blend</h2>
+      <a href="auth.html" class="cta-button">Open the builder →</a>
+    </div>
+  </section>
+
+</div>
+
+<script src="js/vendor/lenis.min.js"></script>
+<script src="js/vendor/gsap.min.js"></script>
+<script src="js/vendor/ScrollTrigger.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build a Blend — Daily Grind Co.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* ===== BUILDER LAYOUT ===== */
+body { background: var(--bg-stone); min-height: 100vh; }
+
+.builder-header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg-stone);
+  border-bottom: 1px solid var(--line);
+  padding: 1.25rem 5vw;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.builder-logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.12em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.header-actions { display: flex; gap: 1.25rem; align-items: center; }
+.btn-text {
+  background: none; border: none;
+  font-family: var(--font-body);
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-soft); cursor: pointer;
+}
+.btn-text:hover { color: var(--ink); }
+.btn-outline {
+  background: none;
+  border: 1px solid var(--ink);
+  padding: 0.5rem 1rem;
+  font-family: var(--font-body);
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink); cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-outline:hover { background: var(--ink); color: var(--bg-stone); }
+
+/* ===== MAIN LAYOUT ===== */
+.builder-body {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  min-height: calc(100vh - 65px);
+}
+
+/* ===== LEFT: CONFIGURATOR ===== */
+.configurator {
+  padding: 4rem 5vw 4rem 5vw;
+  border-right: 1px solid var(--line);
+}
+
+.config-eyebrow {
+  font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent-copper); font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+.config-title {
+  font-family: var(--font-display);
+  font-weight: 600; font-size: 3rem; line-height: 1.05;
+  color: var(--ink); margin-bottom: 3rem;
+}
+
+/* ===== STEP ===== */
+.step { margin-bottom: 3rem; }
+.step-header {
+  display: flex; align-items: baseline; gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
+}
+.step-number {
+  font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent-copper); font-weight: 700;
+}
+.step-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem; font-weight: 500;
+  color: var(--ink);
+}
+
+/* ===== ORIGIN CARDS ===== */
+.origin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.875rem;
+}
+.origin-card {
+  border: 1px solid rgba(28,26,23,0.18);
+  padding: 1.25rem;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  position: relative;
+}
+.origin-card:hover { border-color: var(--ink); }
+.origin-card.selected {
+  border-color: var(--ink);
+  background: rgba(28,26,23,0.04);
+}
+.origin-card.selected::after {
+  content: '✓';
+  position: absolute; top: 0.75rem; right: 0.875rem;
+  font-size: 0.7rem; color: var(--accent-copper);
+}
+.origin-coords {
+  font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent-copper); margin-bottom: 0.4rem;
+}
+.origin-name {
+  font-family: var(--font-display);
+  font-size: 1.15rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 0.25rem;
+}
+.origin-region {
+  font-size: 0.7rem; color: var(--ink-soft); margin-bottom: 0.5rem;
+}
+.origin-notes {
+  font-size: 0.72rem; line-height: 1.5; color: var(--ink-soft);
+  border-top: 1px solid var(--line); padding-top: 0.6rem; margin-top: 0.6rem;
+}
+.origin-price {
+  font-size: 0.7rem; color: var(--ink); font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+/* ===== OPTION PILLS ===== */
+.option-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.option-pill {
+  border: 1px solid rgba(28,26,23,0.22);
+  padding: 0.6rem 1.1rem;
+  font-family: var(--font-body);
+  font-size: 0.72rem; letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s, background 0.2s;
+  background: none;
+}
+.option-pill:hover { border-color: var(--ink); color: var(--ink); }
+.option-pill.selected {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--bg-stone);
+}
+.option-pill:disabled {
+  opacity: 0.3; cursor: not-allowed;
+}
+
+/* ===== CHICORY (South Indian only) ===== */
+.chicory-section { display: none; }
+.chicory-section.visible { display: block; }
+.chicory-note {
+  font-size: 0.75rem; line-height: 1.6; color: var(--ink-soft);
+  margin-bottom: 1rem; max-width: 46ch;
+}
+
+/* ===== RIGHT: SUMMARY PANEL ===== */
+.summary-panel {
+  padding: 2.5rem 2rem;
+  display: flex; flex-direction: column;
+  position: sticky; top: 65px;
+  height: calc(100vh - 65px);
+  overflow-y: auto;
+}
+.summary-eyebrow {
+  font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent-copper); font-weight: 700; margin-bottom: 1.25rem;
+}
+.summary-blend-name {
+  font-family: var(--font-display);
+  font-size: 1.6rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 0.25rem;
+  min-height: 2.2rem;
+}
+.summary-tagline {
+  font-size: 0.75rem; line-height: 1.6; color: var(--ink-soft);
+  margin-bottom: 1.5rem; min-height: 3rem;
+}
+
+.summary-divider { border: none; border-top: 1px solid var(--line); margin: 1.25rem 0; }
+
+.summary-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 0.6rem;
+}
+.summary-key {
+  font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.summary-val {
+  font-size: 0.8rem; color: var(--ink); font-weight: 700;
+  text-align: right; max-width: 55%;
+}
+.summary-val.empty { color: var(--ink-soft); font-weight: 400; font-style: italic; }
+
+.summary-tasting {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(28,26,23,0.04);
+  border-left: 2px solid var(--accent-copper);
+}
+.summary-tasting-label {
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent-copper); margin-bottom: 0.5rem;
+}
+.summary-tasting-text {
+  font-size: 0.78rem; line-height: 1.6; color: var(--ink-soft);
+  min-height: 2.8rem;
+}
+
+.summary-price-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-top: auto; padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+.summary-price-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+.summary-price { font-family: var(--font-display); font-size: 2rem; font-weight: 600; color: var(--ink); }
+
+.btn-primary {
+  width: 100%; margin-top: 1rem;
+  background: var(--ink); color: var(--bg-stone);
+  border: none; padding: 1rem;
+  font-family: var(--font-body);
+  font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; transition: opacity 0.2s;
+}
+.btn-primary:hover { opacity: 0.8; }
+.btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
+.btn-save {
+  width: 100%; margin-top: 0.6rem;
+  background: none; border: 1px solid var(--line);
+  padding: 0.875rem;
+  font-family: var(--font-body);
+  font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-soft); cursor: pointer; transition: border-color 0.2s, color 0.2s;
+}
+.btn-save:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ===== SAVED BLENDS ===== */
+.saved-section {
+  padding: 3rem 5vw;
+  border-top: 1px solid var(--line);
+  background: var(--bg-stone-deep);
+}
+.saved-header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 2rem;
+}
+.saved-title {
+  font-family: var(--font-display);
+  font-size: 1.6rem; font-weight: 600; color: var(--ink);
+}
+.saved-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.saved-card {
+  border: 1px solid var(--line);
+  background: var(--bg-stone);
+  padding: 1.25rem;
+}
+.saved-card-origin {
+  font-size: 0.6rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent-copper); margin-bottom: 0.35rem;
+}
+.saved-card-name {
+  font-family: var(--font-display);
+  font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 0.5rem;
+}
+.saved-card-details { font-size: 0.72rem; color: var(--ink-soft); line-height: 1.6; }
+.saved-card-price { font-weight: 700; color: var(--ink); margin-top: 0.5rem; }
+.saved-card-actions { display: flex; gap: 0.6rem; margin-top: 1rem; }
+.btn-sm {
+  padding: 0.45rem 0.75rem; border: 1px solid var(--line);
+  background: none; font-family: var(--font-body);
+  font-size: 0.65rem; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-soft); cursor: pointer; transition: all 0.2s;
+}
+.btn-sm:hover { border-color: var(--ink); color: var(--ink); }
+.btn-sm.danger:hover { border-color: #c0392b; color: #c0392b; }
+
+.no-saved {
+  font-size: 0.85rem; color: var(--ink-soft);
+  font-style: italic; padding: 1.5rem 0;
+}
+
+/* ===== ORDER CONFIRMATION ===== */
+#order-overlay {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: var(--bg-dark);
+  flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 2rem;
+}
+#order-overlay.visible { display: flex; }
+.order-check { font-size: 3rem; margin-bottom: 1.5rem; }
+.order-title {
+  font-family: var(--font-display); font-size: 3rem; font-weight: 600;
+  color: var(--text-on-dark); margin-bottom: 0.75rem;
+}
+.order-sub { font-size: 0.9rem; color: var(--text-on-dark-soft); max-width: 36ch; line-height: 1.7; margin-bottom: 2rem; }
+.order-id { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent-copper-soft); margin-bottom: 2.5rem; }
+.btn-order-back {
+  border: 1px solid rgba(237,232,224,0.3);
+  background: none; color: var(--text-on-dark);
+  padding: 0.875rem 2rem; font-family: var(--font-body);
+  font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+  cursor: pointer; transition: background 0.2s;
+}
+.btn-order-back:hover { background: rgba(237,232,224,0.1); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .builder-body { grid-template-columns: 1fr; }
+  .summary-panel { position: static; height: auto; border-top: 1px solid var(--line); }
+  .configurator { border-right: none; }
+  .origin-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ORDER CONFIRMATION OVERLAY -->
+<div id="order-overlay">
+  <div class="order-check">☕</div>
+  <h2 class="order-title">Order placed.</h2>
+  <p class="order-sub">Your blend is being prepared. We'll roast it fresh and ship within 12 hours.</p>
+  <div class="order-id" id="order-id-text">ORDER #—</div>
+  <button class="btn-order-back" onclick="closeOrder()">Back to builder</button>
+</div>
+
+<!-- HEADER -->
+<header class="builder-header">
+  <a href="index.html" class="builder-logo">Daily Grind Co.</a>
+  <div class="header-actions">
+    <span id="user-email-label" style="font-size:0.68rem;letter-spacing:0.06em;color:var(--ink-soft)"></span>
+    <button class="btn-text" onclick="handleSignOut()">Sign out</button>
+    <a href="index.html" class="btn-outline">← Home</a>
+  </div>
+</header>
+
+<div class="builder-body">
+
+  <!-- LEFT: CONFIGURATOR -->
+  <div class="configurator">
+    <div class="config-eyebrow">Blend Builder</div>
+    <h1 class="config-title">Configure<br>your cup.</h1>
+
+    <!-- STEP 1: ORIGIN -->
+    <div class="step" id="step-origin">
+      <div class="step-header">
+        <span class="step-number">01 / ORIGIN</span>
+        <span class="step-title">Where is your coffee from?</span>
+      </div>
+      <div class="origin-grid" id="origin-grid">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+
+    <!-- STEP 2: ROAST -->
+    <div class="step" id="step-roast">
+      <div class="step-header">
+        <span class="step-number">02 / ROAST</span>
+        <span class="step-title">How dark do you want it?</span>
+      </div>
+      <div class="option-row" id="roast-options">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+
+    <!-- STEP 3: GRIND -->
+    <div class="step" id="step-grind">
+      <div class="step-header">
+        <span class="step-number">03 / GRIND</span>
+        <span class="step-title">What's your brew method?</span>
+      </div>
+      <div class="option-row" id="grind-options">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+
+    <!-- STEP 4: CHICORY (South Indian only) -->
+    <div class="step chicory-section" id="step-chicory">
+      <div class="step-header">
+        <span class="step-number">04 / CHICORY</span>
+        <span class="step-title">Blend ratio</span>
+      </div>
+      <p class="chicory-note">South Indian filter coffee has used chicory for generations — for body, bitterness, and the right pour. Choose your ratio, or skip it entirely.</p>
+      <div class="option-row" id="chicory-options">
+        <!-- rendered by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: SUMMARY PANEL -->
+  <aside class="summary-panel">
+    <div class="summary-eyebrow">Your blend</div>
+    <div class="summary-blend-name" id="s-name">—</div>
+    <div class="summary-tagline" id="s-tagline">Select an origin to begin.</div>
+
+    <hr class="summary-divider">
+
+    <div class="summary-row">
+      <span class="summary-key">Origin</span>
+      <span class="summary-val empty" id="s-origin">Not selected</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Region</span>
+      <span class="summary-val empty" id="s-region">—</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Roast</span>
+      <span class="summary-val empty" id="s-roast">Not selected</span>
+    </div>
+    <div class="summary-row">
+      <span class="summary-key">Grind</span>
+      <span class="summary-val empty" id="s-grind">Not selected</span>
+    </div>
+    <div class="summary-row" id="s-chicory-row" style="display:none">
+      <span class="summary-key">Chicory</span>
+      <span class="summary-val empty" id="s-chicory">Not selected</span>
+    </div>
+
+    <div class="summary-tasting">
+      <div class="summary-tasting-label">Tasting notes</div>
+      <div class="summary-tasting-text" id="s-notes">—</div>
+    </div>
+
+    <div class="summary-price-row">
+      <span class="summary-price-label">Total / 250g</span>
+      <span class="summary-price" id="s-price">₹—</span>
+    </div>
+    <button class="btn-primary" id="btn-order" onclick="placeOrder()" disabled>Place Order →</button>
+    <button class="btn-save" id="btn-save" onclick="saveBlend()" disabled>Save blend</button>
+    <div id="save-msg" style="font-size:0.72rem;color:var(--accent-copper);text-align:center;margin-top:0.5rem;min-height:1rem"></div>
+  </aside>
+
+</div>
+
+<!-- SAVED BLENDS -->
+<section class="saved-section" id="saved-section">
+  <div class="saved-header">
+    <h2 class="saved-title">Saved blends</h2>
+  </div>
+  <div id="saved-grid" class="saved-grid">
+    <p class="no-saved" id="no-saved-msg">Sign in to see your saved blends.</p>
+  </div>
+</section>
+
+<script src="js/supabase-config.js"></script>
+<script>
+/* ===== CATALOGUE ===== */
+const ORIGINS = [
+  {
+    id: "south-indian",
+    name: "South Indian",
+    coords: "13.3°N, 75.8°E",
+    region: "Chikmagalur & Coorg, India",
+    notes: "Full-bodied, low-acid, earthy with malt undertones. Grown at 900–1700m in the Western Ghats.",
+    basePrice: 380,
+    haschicory: true,
+    roasts: [
+      { id: "medium", label: "Medium", notes: "Balanced sweetness, mild bitterness", price: 0 },
+      { id: "medium-dark", label: "Medium Dark", notes: "Deeper body, chocolate undertones", price: 20 },
+      { id: "dark", label: "Dark", notes: "Bold, smoky, full decoction strength", price: 20 },
+    ],
+    grinds: [
+      { id: "filter-fine", label: "Fine (South Indian Filter)", price: 0 },
+      { id: "medium", label: "Medium (French Press)", price: 0 },
+      { id: "whole-bean", label: "Whole Bean", price: -20 },
+    ],
+    chicory: [
+      { id: "no-chicory", label: "No Chicory", price: 0 },
+      { id: "20pct", label: "20% Chicory", price: 10 },
+      { id: "30pct", label: "30% Chicory (Traditional)", price: 10 },
+    ],
+    tastingBase: "Earthy, malty, low-acid",
+  },
+  {
+    id: "ethiopian",
+    name: "Ethiopian",
+    coords: "6.1°N, 38.5°E",
+    region: "Yirgacheffe, Ethiopia",
+    notes: "Bright, floral, and complex. Natural process lends berry and citrus fruit notes with a tea-like finish.",
+    basePrice: 520,
+    haschicory: false,
+    roasts: [
+      { id: "light", label: "Light", notes: "Floral, bright, jasmine and bergamot", price: 0 },
+      { id: "medium-light", label: "Medium Light", notes: "Balanced florals with fruity body", price: 0 },
+      { id: "medium", label: "Medium", notes: "Fruit-forward with caramel finish", price: 10 },
+    ],
+    grinds: [
+      { id: "pour-over", label: "Pour Over (Medium Coarse)", price: 0 },
+      { id: "aeropress", label: "AeroPress (Medium Fine)", price: 0 },
+      { id: "whole-bean", label: "Whole Bean", price: -20 },
+    ],
+    tastingBase: "Floral, blueberry, bergamot",
+  },
+  {
+    id: "colombian",
+    name: "Colombian",
+    coords: "1.8°N, 76.1°W",
+    region: "Huila, Colombia",
+    notes: "Clean and balanced with caramel sweetness and a bright but mild acidity. The everyday specialty choice.",
+    basePrice: 460,
+    haschicory: false,
+    roasts: [
+      { id: "medium", label: "Medium", notes: "Caramel, mild nuttiness, clean cup", price: 0 },
+      { id: "medium-dark", label: "Medium Dark", notes: "Deeper sweetness, slight smokiness", price: 15 },
+      { id: "dark", label: "Dark", notes: "Bold, rich, espresso-ready", price: 20 },
+    ],
+    grinds: [
+      { id: "espresso", label: "Espresso (Fine)", price: 0 },
+      { id: "drip", label: "Drip / Filtered (Medium)", price: 0 },
+      { id: "whole-bean", label: "Whole Bean", price: -20 },
+    ],
+    tastingBase: "Caramel, walnut, bright acidity",
+  },
+  {
+    id: "italian",
+    name: "Italian Style",
+    coords: "40.8°N, 14.2°E",
+    region: "Napoli blend, sourced globally",
+    notes: "A dark, intense espresso-style blend inspired by the Neapolitan tradition. Robust, creamy, with a dark chocolate finish.",
+    basePrice: 430,
+    haschicory: false,
+    roasts: [
+      { id: "dark", label: "Dark Espresso", notes: "Intense, full crema, dark chocolate", price: 0 },
+      { id: "very-dark", label: "Very Dark", notes: "Maximum boldness, caramelised sugars", price: 15 },
+      { id: "medium-dark", label: "Medium Dark", notes: "Classic espresso balance with brightness", price: -10 },
+    ],
+    grinds: [
+      { id: "espresso-fine", label: "Espresso (Fine)", price: 0 },
+      { id: "moka-pot", label: "Moka Pot (Fine-Medium)", price: 0 },
+      { id: "whole-bean", label: "Whole Bean", price: -20 },
+    ],
+    tastingBase: "Dark chocolate, tobacco, thick crema",
+  },
+];
+
+/* ===== BLEND STATE ===== */
+let state = { origin: null, roast: null, grind: null, chicory: null };
+
+function getOrigin() { return ORIGINS.find(o => o.id === state.origin); }
+
+function computePrice() {
+  const o = getOrigin();
+  if (!o) return null;
+  const roastItem = o.roasts.find(r => r.id === state.roast);
+  const grindItem = o.grinds.find(g => g.id === state.grind);
+  const chicoryItem = o.haschicory ? (o.chicory.find(c => c.id === state.chicory) || null) : null;
+  if (!roastItem || !grindItem) return null;
+  return o.basePrice + roastItem.price + grindItem.price + (chicoryItem ? chicoryItem.price : 0);
+}
+
+function isComplete() {
+  const o = getOrigin();
+  if (!o || !state.roast || !state.grind) return false;
+  if (o.haschicory && !state.chicory) return false;
+  return true;
+}
+
+/* ===== RENDER ORIGINS ===== */
+function renderOrigins() {
+  const grid = document.getElementById('origin-grid');
+  grid.innerHTML = ORIGINS.map(o => `
+    <div class="origin-card${state.origin === o.id ? ' selected' : ''}" onclick="selectOrigin('${o.id}')">
+      <div class="origin-coords">${o.coords}</div>
+      <div class="origin-name">${o.name}</div>
+      <div class="origin-region">${o.region}</div>
+      <div class="origin-notes">${o.notes}</div>
+      <div class="origin-price">From ₹${o.basePrice} / 250g</div>
+    </div>
+  `).join('');
+}
+
+/* ===== RENDER OPTIONS ===== */
+function renderOptions(containerId, items, stateKey, onChange) {
+  const el = document.getElementById(containerId);
+  el.innerHTML = items.map(item => `
+    <button class="option-pill${state[stateKey] === item.id ? ' selected' : ''}"
+            onclick="${onChange}('${item.id}')">
+      ${item.label}${item.price > 0 ? ' <span style="opacity:.55">+₹'+item.price+'</span>' : item.price < 0 ? ' <span style="opacity:.55">₹'+item.price+'</span>' : ''}
+    </button>
+  `).join('');
+}
+
+/* ===== SELECT HANDLERS ===== */
+function selectOrigin(id) {
+  state.origin = id;
+  state.roast = null; state.grind = null; state.chicory = null;
+  const o = getOrigin();
+  renderOrigins();
+  renderOptions('roast-options', o.roasts, 'roast', 'selectRoast');
+  renderOptions('grind-options', o.grinds, 'grind', 'selectGrind');
+  const chicoryStep = document.getElementById('step-chicory');
+  if (o.haschicory) {
+    chicoryStep.classList.add('visible');
+    renderOptions('chicory-options', o.chicory, 'chicory', 'selectChicory');
+  } else {
+    chicoryStep.classList.remove('visible');
+  }
+  updateSummary();
+}
+
+function selectRoast(id) {
+  state.roast = id;
+  const o = getOrigin();
+  renderOptions('roast-options', o.roasts, 'roast', 'selectRoast');
+  updateSummary();
+}
+
+function selectGrind(id) {
+  state.grind = id;
+  const o = getOrigin();
+  renderOptions('grind-options', o.grinds, 'grind', 'selectGrind');
+  updateSummary();
+}
+
+function selectChicory(id) {
+  state.chicory = id;
+  const o = getOrigin();
+  renderOptions('chicory-options', o.chicory, 'chicory', 'selectChicory');
+  updateSummary();
+}
+
+/* ===== UPDATE SUMMARY PANEL ===== */
+function updateSummary() {
+  const o = getOrigin();
+  const price = computePrice();
+  const complete = isComplete();
+
+  if (!o) {
+    document.getElementById('s-name').textContent = '—';
+    document.getElementById('s-tagline').textContent = 'Select an origin to begin.';
+    document.getElementById('s-origin').textContent = 'Not selected';
+    document.getElementById('s-origin').className = 'summary-val empty';
+    document.getElementById('s-region').textContent = '—';
+    document.getElementById('s-roast').textContent = 'Not selected';
+    document.getElementById('s-roast').className = 'summary-val empty';
+    document.getElementById('s-grind').textContent = 'Not selected';
+    document.getElementById('s-grind').className = 'summary-val empty';
+    document.getElementById('s-notes').textContent = '—';
+    document.getElementById('s-price').textContent = '₹—';
+    document.getElementById('s-chicory-row').style.display = 'none';
+    document.getElementById('btn-order').disabled = true;
+    document.getElementById('btn-save').disabled = true;
+    return;
+  }
+
+  const roastItem = o.roasts.find(r => r.id === state.roast);
+  const grindItem = o.grinds.find(g => g.id === state.grind);
+  const chicoryItem = o.haschicory ? o.chicory.find(c => c.id === state.chicory) : null;
+
+  document.getElementById('s-name').textContent = o.name + (roastItem ? ` · ${roastItem.label}` : '');
+  document.getElementById('s-tagline').textContent = roastItem ? roastItem.notes : o.notes;
+  document.getElementById('s-origin').textContent = o.name;
+  document.getElementById('s-origin').className = 'summary-val';
+  document.getElementById('s-region').textContent = o.region;
+  document.getElementById('s-roast').textContent = roastItem ? roastItem.label : 'Not selected';
+  document.getElementById('s-roast').className = roastItem ? 'summary-val' : 'summary-val empty';
+  document.getElementById('s-grind').textContent = grindItem ? grindItem.label : 'Not selected';
+  document.getElementById('s-grind').className = grindItem ? 'summary-val' : 'summary-val empty';
+  document.getElementById('s-notes').textContent = o.tastingBase + (roastItem ? ` — ${roastItem.notes}` : '');
+
+  if (o.haschicory) {
+    document.getElementById('s-chicory-row').style.display = '';
+    document.getElementById('s-chicory').textContent = chicoryItem ? chicoryItem.label : 'Not selected';
+    document.getElementById('s-chicory').className = chicoryItem ? 'summary-val' : 'summary-val empty';
+  } else {
+    document.getElementById('s-chicory-row').style.display = 'none';
+  }
+
+  document.getElementById('s-price').textContent = price ? `₹${price}` : '₹—';
+  document.getElementById('btn-order').disabled = !complete;
+  document.getElementById('btn-save').disabled = !complete;
+}
+
+/* ===== PLACE ORDER ===== */
+async function placeOrder() {
+  if (!isComplete()) return;
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { window.location.href = 'auth.html'; return; }
+
+  const o = getOrigin();
+  const price = computePrice();
+  const orderId = 'CQ-' + Date.now().toString(36).toUpperCase();
+
+  // Save to Supabase
+  await supabase.from('blends').insert({
+    user_id: session.user.id,
+    origin_id: state.origin,
+    origin_name: o.name,
+    roast: state.roast,
+    grind: state.grind,
+    chicory: state.chicory || null,
+    price,
+    order_id: orderId,
+    status: 'ordered',
+  });
+
+  document.getElementById('order-id-text').textContent = `ORDER #${orderId}`;
+  document.getElementById('order-overlay').classList.add('visible');
+}
+
+function closeOrder() {
+  document.getElementById('order-overlay').classList.remove('visible');
+  loadSavedBlends();
+}
+
+/* ===== SAVE BLEND ===== */
+async function saveBlend() {
+  if (!isComplete()) return;
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { window.location.href = 'auth.html'; return; }
+
+  const o = getOrigin();
+  const price = computePrice();
+  const saveMsg = document.getElementById('save-msg');
+  saveMsg.textContent = 'Saving…';
+
+  const { error } = await supabase.from('blends').insert({
+    user_id: session.user.id,
+    origin_id: state.origin,
+    origin_name: o.name,
+    roast: state.roast,
+    grind: state.grind,
+    chicory: state.chicory || null,
+    price,
+    status: 'saved',
+  });
+
+  if (error) { saveMsg.textContent = 'Error saving. Try again.'; }
+  else { saveMsg.textContent = 'Saved!'; setTimeout(() => saveMsg.textContent = '', 2000); loadSavedBlends(); }
+}
+
+/* ===== LOAD SAVED BLENDS ===== */
+async function loadSavedBlends() {
+  const { data: { session } } = await supabase.auth.getSession();
+  const grid = document.getElementById('saved-grid');
+  const noMsg = document.getElementById('no-saved-msg');
+
+  if (!session) {
+    noMsg.textContent = 'Sign in to see your saved blends.';
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from('blends')
+    .select('*')
+    .eq('user_id', session.user.id)
+    .order('created_at', { ascending: false });
+
+  if (!data || data.length === 0) {
+    grid.innerHTML = '<p class="no-saved">No saved blends yet. Configure one above and save it.</p>';
+    return;
+  }
+
+  grid.innerHTML = data.map(b => `
+    <div class="saved-card">
+      <div class="saved-card-origin">${b.origin_id?.replace(/-/g,' ').toUpperCase() || ''} · ${b.status?.toUpperCase() || ''}</div>
+      <div class="saved-card-name">${b.origin_name} · ${b.roast || ''}</div>
+      <div class="saved-card-details">
+        Grind: ${b.grind || '—'}<br>
+        ${b.chicory ? `Chicory: ${b.chicory}<br>` : ''}
+        ${b.order_id ? `Order: ${b.order_id}` : ''}
+      </div>
+      <div class="saved-card-price">₹${b.price} / 250g</div>
+      <div class="saved-card-actions">
+        <button class="btn-sm" onclick="reloadBlend(${JSON.stringify(b).replace(/"/g,'&quot;')})">Load</button>
+        <button class="btn-sm danger" onclick="deleteBlend('${b.id}')">Delete</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function reloadBlend(b) {
+  selectOrigin(b.origin_id);
+  if (b.roast) { state.roast = b.roast; const o = getOrigin(); renderOptions('roast-options', o.roasts, 'roast', 'selectRoast'); }
+  if (b.grind) { state.grind = b.grind; const o = getOrigin(); renderOptions('grind-options', o.grinds, 'grind', 'selectGrind'); }
+  if (b.chicory) { state.chicory = b.chicory; const o = getOrigin(); if (o.haschicory) renderOptions('chicory-options', o.chicory, 'chicory', 'selectChicory'); }
+  updateSummary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function deleteBlend(id) {
+  if (!confirm('Delete this blend?')) return;
+  await supabase.from('blends').delete().eq('id', id);
+  loadSavedBlends();
+}
+
+/* ===== AUTH ===== */
+async function handleSignOut() {
+  await supabase.auth.signOut();
+  window.location.href = 'auth.html';
+}
+
+/* ===== INIT ===== */
+async function init() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) { window.location.href = 'auth.html'; return; }
+  document.getElementById('user-email-label').textContent = session.user.email;
+  renderOrigins();
+  renderOptions('roast-options', ORIGINS[0].roasts, 'roast', 'selectRoast');
+  renderOptions('grind-options', ORIGINS[0].grinds, 'grind', 'selectGrind');
+  await loadSavedBlends();
+}
+
+init();
+</script>
+</body>
+</html>
