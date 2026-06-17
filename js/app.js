@@ -286,8 +286,6 @@ function initMarquee() {
 function initScrollAnimations() {
   initFrameScrub();
   initHeroTransition();
-  initDarkOverlay();
-  initCounters();
   initMarquee();
   document.querySelectorAll(".scroll-section").forEach(setupSectionAnimation);
   ScrollTrigger.refresh();

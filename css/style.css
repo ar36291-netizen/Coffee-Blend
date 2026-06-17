@@ -197,7 +197,7 @@ a { color: inherit; text-decoration: none; }
 /* ===== SCROLL CONTAINER ===== */
 #scroll-container {
   position: relative;
-  height: 900vh;
+  height: 600vh;
   z-index: 10;
 }
 
