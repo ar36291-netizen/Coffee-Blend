@@ -453,6 +453,7 @@ body { background: var(--bg-stone); min-height: 100vh; }
   </div>
 </section>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="js/supabase-config.js"></script>
 <script>
 /* ===== CATALOGUE ===== */
@@ -682,31 +683,89 @@ function updateSummary() {
   document.getElementById('btn-save').disabled = !complete;
 }
 
-/* ===== PLACE ORDER ===== */
+/* ===== PLACE ORDER — Razorpay ===== */
 async function placeOrder() {
   if (!isComplete()) return;
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await window.supabase.auth.getSession();
   if (!session) { window.location.href = 'auth.html'; return; }
 
   const o = getOrigin();
   const price = computePrice();
-  const orderId = 'CQ-' + Date.now().toString(36).toUpperCase();
+  const btn = document.getElementById('btn-order');
+  btn.disabled = true;
+  btn.textContent = 'Creating order…';
 
-  // Save to Supabase
-  await supabase.from('blends').insert({
-    user_id: session.user.id,
-    origin_id: state.origin,
-    origin_name: o.name,
-    roast: state.roast,
-    grind: state.grind,
-    chicory: state.chicory || null,
-    price,
-    order_id: orderId,
-    status: 'ordered',
-  });
+  // Step 1: create Razorpay order via serverless function
+  let rzpOrder;
+  try {
+    const res = await fetch('/api/create-order', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ amount: price }),
+    });
+    rzpOrder = await res.json();
+    if (!rzpOrder.id) throw new Error(rzpOrder.error || 'Order creation failed');
+  } catch (err) {
+    alert('Could not create order: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = 'Place Order →';
+    return;
+  }
 
-  document.getElementById('order-id-text').textContent = `ORDER #${orderId}`;
-  document.getElementById('order-overlay').classList.add('visible');
+  // Step 2: open Razorpay checkout modal
+  const options = {
+    key: 'rzp_test_T2jpOBsbaySuCm',
+    amount: rzpOrder.amount,
+    currency: 'INR',
+    name: 'Daily Grind Co.',
+    description: `${o.name} · ${state.roast} · ${state.grind}`,
+    order_id: rzpOrder.id,
+    prefill: { email: session.user.email },
+    theme: { color: '#1C1A17' },
+    handler: async function(response) {
+      // Step 3: verify payment signature
+      const verify = await fetch('/api/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature: response.razorpay_signature,
+        }),
+      });
+      const { verified } = await verify.json();
+      if (!verified) { alert('Payment verification failed. Contact support.'); return; }
+
+      // Step 4: save confirmed order to Supabase
+      await window.supabase.from('blends').insert({
+        user_id: session.user.id,
+        origin_id: state.origin,
+        origin_name: o.name,
+        roast: state.roast,
+        grind: state.grind,
+        chicory: state.chicory || null,
+        price,
+        order_id: rzpOrder.id,
+        razorpay_payment_id: response.razorpay_payment_id,
+        status: 'paid',
+      });
+
+      document.getElementById('order-id-text').textContent = `ORDER #${rzpOrder.id}`;
+      document.getElementById('order-overlay').classList.add('visible');
+      loadSavedBlends();
+    },
+    modal: {
+      ondismiss: function() {
+        btn.disabled = false;
+        btn.textContent = 'Place Order →';
+      }
+    }
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.open();
+  btn.disabled = false;
+  btn.textContent = 'Place Order →';
 }
 
 function closeOrder() {
@@ -717,7 +776,7 @@ function closeOrder() {
 /* ===== SAVE BLEND ===== */
 async function saveBlend() {
   if (!isComplete()) return;
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await window.supabase.auth.getSession();
   if (!session) { window.location.href = 'auth.html'; return; }
 
   const o = getOrigin();
@@ -725,7 +784,7 @@ async function saveBlend() {
   const saveMsg = document.getElementById('save-msg');
   saveMsg.textContent = 'Saving…';
 
-  const { error } = await supabase.from('blends').insert({
+  const { error } = await window.supabase.from('blends').insert({
     user_id: session.user.id,
     origin_id: state.origin,
     origin_name: o.name,
@@ -742,7 +801,7 @@ async function saveBlend() {
 
 /* ===== LOAD SAVED BLENDS ===== */
 async function loadSavedBlends() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await window.supabase.auth.getSession();
   const grid = document.getElementById('saved-grid');
   const noMsg = document.getElementById('no-saved-msg');
 
@@ -791,19 +850,19 @@ function reloadBlend(b) {
 
 async function deleteBlend(id) {
   if (!confirm('Delete this blend?')) return;
-  await supabase.from('blends').delete().eq('id', id);
+  await window.supabase.from('blends').delete().eq('id', id);
   loadSavedBlends();
 }
 
 /* ===== AUTH ===== */
 async function handleSignOut() {
-  await supabase.auth.signOut();
+  await window.supabase.auth.signOut();
   window.location.href = 'auth.html';
 }
 
 /* ===== INIT ===== */
 async function init() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const { data: { session } } = await window.supabase.auth.getSession();
   if (!session) { window.location.href = 'auth.html'; return; }
   document.getElementById('user-email-label').textContent = session.user.email;
   renderOrigins();
